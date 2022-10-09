@@ -4,8 +4,13 @@ import routes from './routes';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import services from './services';
 import { useEffect, useState } from 'react';
+import store from './redux/store';
+import {Provider} from 'react-redux'
+import AppBarr from './appbar';
 
 function App() {
+
+  const [loggedIn,setLoggedIn] = useState(false)
 
   useEffect(()=>{
 
@@ -13,6 +18,8 @@ function App() {
 
     services.autentication().then((res)=>{
   
+      setLoggedIn(true)
+
       if(path==='/createAccount'||path==='/login'){
 
         window.location.pathname='/'
@@ -21,7 +28,7 @@ function App() {
  
     }).catch((err)=>{
 
-
+         setLoggedIn(false)
       if(path!=='/createAccount'){
 
         if(path==='/login'){
@@ -38,27 +45,16 @@ function App() {
 
   },[])
 
-  const [img,setImgUrl] = useState('')
-  
-  const upload =(e)=>{
-
-       services.uploadImage(e.target.files[0]).then((res)=>{
-
-        console.log(res);
-
-       }).catch((err)=>{
-
-        console.log(err);
-
-       })
-
-  }
-
 
   return (
+    <Provider store={store}>
     <Router>
 
-        <input type='file' value={img} onChange={upload}/>
+      {
+        loggedIn?
+        <AppBarr/>:
+        null
+      }
 
       <Routes>
         {
@@ -70,6 +66,7 @@ function App() {
         }
       </Routes>
     </Router>
+    </Provider>
   );
 }
 
