@@ -1,32 +1,72 @@
 import logo from './logo.svg';
 import './App.css';
-import db from './firebase';
-import {addDoc,collection} from 'firebase/firestore'
+import routes from './routes';
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import services from './services';
+import { useEffect, useState } from 'react';
+import store from './redux/store';
+import {Provider} from 'react-redux'
+import AppBarr from './appbar';
 
 function App() {
 
+  const [loggedIn,setLoggedIn] = useState(false)
 
-  const submit=()=>{
+  useEffect(()=>{
 
-     addDoc(collection(db,'list'),{
-      name:'Amir',
-      age:18
-     }).then((res)=>{
+    let path = window.location.pathname
 
-        console.log(res);
+    services.autentication().then((res)=>{
+  
+      setLoggedIn(true)
 
-     }).catch((err)=>{
-      console.log(err);
-     })
+      if(path==='/createAccount'||path==='/login'){
 
-  }
+        window.location.pathname='/'
+
+      }
+ 
+    }).catch((err)=>{
+
+         setLoggedIn(false)
+      if(path!=='/createAccount'){
+
+        if(path==='/login'){
+          return
+        }else{
+
+          window.location.pathname='/createAccount'
+
+        }
+
+      }
+
+    })
+
+  },[])
+
 
   return (
-    <div className="App">
-      <button 
-      onClick={submit}
-      >add</button>
-    </div>
+    <Provider store={store}>
+    <Router>
+
+      {
+        loggedIn?
+        <AppBarr/>:
+        null
+      }
+
+      <Routes>
+        {
+          routes.map((i,index)=>{
+
+            return <Route path={i.path} key={index} element={i.componet} />
+
+          })
+        }
+      </Routes>
+    </Router>
+    </Provider>
   );
 }
 
