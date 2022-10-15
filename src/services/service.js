@@ -1,5 +1,5 @@
 import {db,storage} from "../firebase";
-import {collection,getDocs,where,query,addDoc,doc,getFirestore,getDoc, onSnapshot, Firestore} from 'firebase/firestore'
+import {collection,getDocs,where,query,addDoc,doc,getFirestore,getDoc, onSnapshot, Firestore, setDoc} from 'firebase/firestore'
 import { async } from "@firebase/util";
 import { formControlLabelClasses } from "@mui/material";
 import {getStorage,ref,uploadBytesResumable,getDownloadURL} from 'firebase/storage'
@@ -178,6 +178,67 @@ const services ={
               });
           }
       ); 
+
+      })
+
+    },
+
+    addData:(colc,data)=>{
+
+      return new Promise((resolve,reject)=>{
+
+        addDoc(collection(db,colc),data).then((res)=>{
+
+          resolve(true)
+
+        }).catch((err)=>{
+
+          reject(false)
+
+        })
+
+      })
+
+    },
+
+    getData:async(colc,usertype,id)=>{
+
+
+      return new Promise((resolove,reject)=>{
+
+
+        let response
+
+        if(colc==='categories'){
+
+          response = query(collection(db,colc))
+        }else{
+
+          response = query(collection(db, colc), where(usertype ,"==",id))
+
+        }
+
+
+          getDocs(response).then((res)=>{
+            
+            const categorie=[]
+
+
+            res.forEach((res)=>{
+
+              let alldata = res.data()
+              
+              alldata.id=res.id
+
+              categorie.push(alldata)
+
+            })
+
+            resolove(categorie)
+
+          }).catch((err)=>{
+            reject(err)
+          })
 
       })
 
