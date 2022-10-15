@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useSelector,useDispatch } from 'react-redux';
 import { getUserSet } from '../redux';
+import { useNavigate } from 'react-router-dom';
 
 const style ={
   path:{
@@ -20,6 +21,8 @@ export default function AppBBarr() {
 
   const [path,setPath] = React.useState('')
 
+  const navigate = useNavigate()
+
   const dispatch = useDispatch()
 
   React.useEffect(()=>{
@@ -32,6 +35,10 @@ export default function AppBBarr() {
 
   },[])
 
+  const toPath=(path)=>{
+    setPath(path)
+    navigate(path)
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" style={{
@@ -44,7 +51,9 @@ export default function AppBBarr() {
               marginLeft:'25px',
               marginTop:'15px'
             }}>
-            <Button color='inherit' style={path==='/categories'?style.path:null}>Categories</Button>
+            <Button color='inherit'
+            onClick={()=>toPath('/categories')}
+            style={path==='/categories'?style.path:null}>Categories</Button>
             <Button color="inherit" style={path==='/product'?style.path:null}>Products</Button>
             <Button color="inherit" style={path==='/orders'?style.path:null}>Orders</Button>
             {
