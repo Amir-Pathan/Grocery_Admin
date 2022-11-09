@@ -6,8 +6,16 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton'
+import { useNavigate } from 'react-router-dom';
 
-export default function ProductCard({categoryName,categoryImage,categoryId,isAdmin,isProduct}) {
+
+const style ={
+  editIcon:{
+    marginLeft:'80%'
+  }
+}
+
+export default function ProductCard({name,image,categoryDescription,categoryActive,id,isAdmin,isProduct,updateCategory}) {
 
   const [isVisible,setIsvisible] = React.useState(false)
 
@@ -17,31 +25,52 @@ export default function ProductCard({categoryName,categoryImage,categoryId,isAdm
 
   }
 
+  const categoryUpdate=()=>{
+
+    updateCategory(id,name,image,categoryActive,categoryDescription)
+
+  }
+
+  const navigete = useNavigate()
+
+  const toPath=()=>navigete('/addproduct/'+id)
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea 
-      onMouseEnter={()=>handleChange(true)}
-      onMouseLeave={()=>handleChange(false)}
-      >
+    <Card sx={{ maxWidth: 345 }} 
+    onMouseEnter={()=>handleChange(true)}
+    onMouseLeave={()=>handleChange(false)}
+    >
       {
         isAdmin&&!isProduct?
           isVisible?
           <IconButton 
+          style={style.editIcon}
+          onClick={categoryUpdate}
           >
-              <EditIcon/>
+              <EditIcon />
            </IconButton>:
            null
+        :!isAdmin&&isProduct?
+        isVisible?
+        <IconButton 
+        style={style.editIcon}
+        onClick={toPath}
+        >
+            <EditIcon/>
+         </IconButton>:
+         null
         :null
       }
+      <CardActionArea >
         <CardMedia
           component="img"
           height="140"
-          image={categoryImage}
-          alt={categoryName}
+          image={image}
+          alt={name}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {categoryName}
+            {name}
           </Typography>
         </CardContent>
       </CardActionArea>

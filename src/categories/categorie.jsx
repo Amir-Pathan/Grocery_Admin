@@ -25,10 +25,12 @@ class Categories extends Component{
             isActive:true,
             categoryImg:'',
             isUpdate:false,
-            categories :[]
+            categories :[],
+            id:''
         }
         this.handleClose=this.handleClose.bind(this)
         this.submitCategories=this.submitCategories.bind(this)
+        this.updateCategory= this.updateCategory.bind(this)
 
     }
 
@@ -64,23 +66,43 @@ class Categories extends Component{
 
     submitCategories(){
 
-        const {categoryName,categoryDescription,categoryImg,isActive} = this.state
+        const {categoryName,categoryDescription,categoryImg,isActive,id} = this.state
 
         if(categoryImg.length>0&&categoryName.length>3&&categoryDescription.length>0){
 
-             services.addData('categories',{
-                categoryName:categoryName,
-                categoryImg:categoryImg,
-                categoryDescription:categoryDescription,
-                categoryActive:isActive
-             }).then((res)=>{
+            if(this.state.isUpdate){
 
-                this.handleChange('open',false)
+                services.updateData('categories',id,{
+                    id:id,
+                    categoryName:categoryName,
+                    categoryImg:categoryImg,
+                    categoryDescription:categoryDescription,
+                    categoryActive:String(isActive).toLowerCase()=='true'
+                }).then((res)=>{
+                    this.handleChange('open',false)
+                }).catch((err)=>{
+                    alert('something wrong try again')
+                    this.handleChange('open',false)
+                })
 
-             }).catch((err)=>{
-                alert('Something went wrong try again')
-                this.handleChange('open',false)
-             })
+            }else{
+
+                services.addData('categories',{
+                    categoryName:categoryName,
+                    categoryImg:categoryImg,
+                    categoryDescription:categoryDescription,
+                    categoryActive:String(isActive).toLowerCase()=='true'
+                 }).then((res)=>{
+    
+                    this.handleChange('open',false)
+    
+                 }).catch((err)=>{
+                    alert('Something went wrong try again')
+                    this.handleChange('open',false)
+                 })
+
+            }
+
 
         }else{
 
@@ -90,10 +112,24 @@ class Categories extends Component{
 
     }
 
+    updateCategory(id,name,image,categoryActive,categoryDescription){
+
+        this.setState({
+            ...this.state,
+            id:id,
+            categoryActive:categoryActive,
+            categoryImg:image,
+            categoryDescription:categoryDescription,
+            categoryName:name,
+            isUpdate:true,
+            open:true
+        })
+
+        
+    }
 
     render(){
 
-        console.log(this.state.user);
 
         return(
             <>
@@ -175,7 +211,7 @@ class Categories extends Component{
                         </Grid>
                         <Grid item xs={6} md={6}>
                             <Button variant='contained' 
-                            onClick={this.submitCategories}>Add Category</Button>
+                            onClick={this.submitCategories}>{this.state.isUpdate?"Update":'Add'} Category</Button>
                         </Grid>
                      </Grid>
                 </Grid>
@@ -187,11 +223,14 @@ class Categories extends Component{
 
                         return <Grid item xs={6} md={3} key={index}>
                             <ProductCard 
-                            categoryName={i.categoryName} 
-                            categoryImage={i.categoryImg}
-                            categoryId={i.id}
+                            name={i.categoryName} 
+                            image={i.categoryImg}
+                            categoryDescription={i.categoryDescription}
+                            categoryActive={i.categoryActive}
+                            id={i.id}
                             isAdmin={this.props.user.no==='7741943487'?true:false}
                             isProduct={false}
+                            updateCategory={(id,name,image,categoryActive,categoryDescription)=>this.updateCategory(id,name,image,categoryActive,categoryDescription)}
                             />
                         </Grid>
 

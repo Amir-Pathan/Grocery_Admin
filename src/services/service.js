@@ -1,5 +1,5 @@
 import {db,storage} from "../firebase";
-import {collection,getDocs,where,query,addDoc,doc,getFirestore,getDoc, onSnapshot, Firestore, setDoc} from 'firebase/firestore'
+import {collection,getDocs,where,query,addDoc,doc,getFirestore,getDoc, onSnapshot, Firestore, setDoc, updateDoc} from 'firebase/firestore'
 import { async } from "@firebase/util";
 import { formControlLabelClasses } from "@mui/material";
 import {getStorage,ref,uploadBytesResumable,getDownloadURL} from 'firebase/storage'
@@ -201,8 +201,29 @@ const services ={
 
     },
 
-    getData:async(colc,usertype,id)=>{
+    updateData:(colc,id,dc)=>{
 
+      return new Promise((resolve,reject)=>{
+
+        const docRef = doc(db,colc,id)
+
+        updateDoc(docRef,dc).then((res)=>{
+
+          console.log(res);
+          resolve(res)
+
+        }).catch((err)=>{
+          console.log(err);
+          reject(err)
+        })
+
+      })
+
+    },
+
+    getData:async(colc,usertype,id,no)=>{
+
+      console.log(no);
 
       return new Promise((resolove,reject)=>{
 
@@ -214,7 +235,11 @@ const services ={
           response = query(collection(db,colc))
         }else{
 
-          response = query(collection(db, colc), where(usertype ,"==",id))
+          if(no==='7741943487'){
+            response = query(collection(db,colc))
+          }else{
+            response = query(collection(db, colc), where(usertype ,"==",id))
+          }
 
         }
 
@@ -241,6 +266,40 @@ const services ={
           })
 
       })
+
+    },
+
+    getSingleData:(id,colc)=>{
+
+      console.log(colc,id);
+
+      return new Promise((resolve,reject)=>{
+
+        const dc = doc(db,colc,id)
+
+        getDoc(dc).then((res)=>{
+
+          let allData = res.data()
+
+          allData.id=res.id
+
+          resolve(allData)
+
+        }).catch((err)=>{
+          reject(err)
+        })
+
+      })
+
+    },
+
+    getSeller:()=>{
+
+      let sellr = localStorage.getItem('seller')
+
+      sellr= JSON.parse(sellr)||{}
+
+      return sellr
 
     }
 
