@@ -56,7 +56,9 @@ export default function AppBBarr() {
             style={path==='/categories'?style.path:null}>Categories</Button>
             <Button color="inherit" style={path==='/products'?style.path:null}
             onClick={()=>toPath('/products')}>Products</Button>
-            <Button color="inherit" style={path==='/orders'?style.path:null}>Orders</Button>
+            <Button color="inherit" style={path==='/orders'?style.path:null}
+            onClick={()=>toPath('/orders')}
+            >Orders</Button>
             {
                user.no==='7741943487'?
                <>

@@ -3,6 +3,7 @@ import Login from "./login";
 import Categories from "./categories";
 import Products from "./products";
 import AddProduct from "./addProduct";
+import Orders from "./orders";
 
 const routes=[
     {
@@ -24,6 +25,10 @@ const routes=[
     {
         path:'/addproduct/:id',
         componet:<AddProduct/>
+    },
+    {
+        path:'/orders',
+        componet:<Orders/>
     }
 ]
 
