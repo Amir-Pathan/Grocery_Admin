@@ -114,10 +114,12 @@ class Categories extends Component{
 
     updateCategory(id,name,image,categoryActive,categoryDescription){
 
+        console.log(categoryActive);
+
         this.setState({
             ...this.state,
             id:id,
-            categoryActive:categoryActive,
+            isActive:categoryActive,
             categoryImg:image,
             categoryDescription:categoryDescription,
             categoryName:name,
@@ -195,7 +197,7 @@ class Categories extends Component{
                           row
                           aria-labelledby="demo-row-radio-buttons-group-label"
                           name="row-radio-buttons-group"
-                          defaultValue={this.state.isActive}
+                          value={this.state.isActive}
                           onChange={(e)=>this.handleChange('isActive',e.target.value)}
                         >
                            <FormControlLabel value={true} control={<Radio />} label="Active" />
