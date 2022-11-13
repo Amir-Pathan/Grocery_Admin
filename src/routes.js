@@ -4,6 +4,7 @@ import Categories from "./categories";
 import Products from "./products";
 import AddProduct from "./addProduct";
 import Orders from "./orders";
+import Users from "./users";
 
 const routes=[
     {
@@ -29,6 +30,14 @@ const routes=[
     {
         path:'/orders',
         componet:<Orders/>
+    },
+    {
+        path:'/sellers',
+        componet:<Users user={'sellers'}/>
+    },
+    {
+        path:'/customers',
+        componet:<Users user={'customers'}/>
     }
 ]
 

@@ -230,13 +230,12 @@ const services ={
 
         let response
 
-        if(colc==='categories'){
+        if(colc==='categories'||colc==='customers'||colc==='sellers'){
 
           response = query(collection(db,colc))
         }else{
 
           if(no==='7741943487'){
-            console.log(colc);
             response = query(collection(db,colc))
           }else{
             response = query(collection(db, colc), where(usertype ,"==",id))
