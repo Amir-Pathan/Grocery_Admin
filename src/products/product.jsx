@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import { Button, Grid } from "@mui/material";
 import services from "../services";
 import ProductCard from "../lib/productcart/productcart";
+import Container from '@mui/material/Container'
 
 
 class Products extends Component{
@@ -52,7 +53,7 @@ class Products extends Component{
     render(){
 
         return(
-            <>
+            <Container>
             {
                 this.state.isAdmin?
                   null:
@@ -81,7 +82,7 @@ class Products extends Component{
                     })
                 }
             </Grid>
-            </>
+            </Container>
         )
 
     }

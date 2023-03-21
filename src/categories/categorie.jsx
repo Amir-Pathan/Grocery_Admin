@@ -12,6 +12,7 @@ import FormLabel from '@mui/material/FormLabel';
 import UploadIamge from '../lib/imgUpload/imgUpload'
 import services from '../services'
 import ProductCard from '../lib/productcart'
+import Container from '@mui/material/Container'
 
 class Categories extends Component{
 
@@ -134,7 +135,7 @@ class Categories extends Component{
 
 
         return(
-            <>
+            <Container>
               {
                 this.props.user.no==='7741943487'?
                   <Grid container item xs={12} md={12} style={{marginTop:'10px'}}>
@@ -241,7 +242,7 @@ class Categories extends Component{
                     <h1>Add Categories</h1>
                 }
               </Grid>
-            </>
+            </Container>
         )
 
     }
