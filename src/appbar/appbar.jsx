@@ -8,22 +8,27 @@ import IconButton from '@mui/material/IconButton';
 import { useSelector,useDispatch } from 'react-redux';
 import { getUserSet } from '../redux';
 import { useNavigate } from 'react-router-dom';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const style ={
   path:{
-    borderBottom:'2px solid blue'
+    borderBottom:'2px solid blue',
+    color:'blue'
   }
 }
 
 export default function AppBBarr() {
-
-  const user=useSelector(state=>state.user.user)
 
   const [path,setPath] = React.useState('')
 
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
+
+  const user=useSelector(state=>state.user.user)
 
   React.useEffect(()=>{
 
@@ -35,21 +40,53 @@ export default function AppBBarr() {
 
   },[])
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    
+    setAnchorEl(event.currentTarget);
+
+  };
+  
+  
+
   const toPath=(path)=>{
+    
     setPath(path)
+
     navigate(path)
+  
   }
+  const handleClose = () => {
+
+    setAnchorEl(null);
+
+  }
+
+  let logout =()=>{
+
+     localStorage.removeItem('seller')
+
+    navigate('/login')
+
+     handleClose()
+ 
+  }
+
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <>
       <AppBar position="static" style={{
         backgroundColor:"white",
         color:'black'
       }}>
         <Toolbar>
+          <Box component="div" sx={{ flexGrow: 1,display:'flex',flexDirection:'row',alignItems:"baseline" }}> 
             <Typography variant='h6'> {user.hotelName} Grocery</Typography>
             <div style={{
               marginLeft:'25px',
-              marginTop:'15px'
             }}>
             <Button color='inherit'
             onClick={()=>toPath('/categories')}
@@ -70,8 +107,23 @@ export default function AppBBarr() {
                :null
             }
             </div>
+          </Box>
+          <Box component="div" sx={{ display:'flex',flexDirection:'row',alignItems:"baseline" }}>
+            <IconButton onClick={handleClick}>
+                <AccountCircle/>
+            </IconButton>
+            <Menu
+             id="basic-menu"
+             anchorEl={anchorEl}
+             open={open}
+             onClose={handleClose}
+             >
+               <MenuItem onClick={handleClose}> <AccountCircle/>   Profile</MenuItem>
+               <MenuItem onClick={logout}><LogoutIcon/> Logout</MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
-    </Box>
+    </>
   );
 }
